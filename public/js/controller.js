@@ -3,15 +3,34 @@ var app = angular.module('app', []);
 // Main controller
 app.controller('main_controller', function ($scope, $http) {
   $scope.header = "What to do next?";
-  $scope.tasks = ["Need to do something", "Need to do something else", "Need to do yet another thing"];
+  $scope.logged = true;
   $scope.text = "";
+  
+  //authenticated
+  
+  var hash = CryptoJS.SHA256("Message");
+  console.log(hash.toString());
   
   $http.get('/get_json').
     success(function(data, status, headers, config) {
       // this callback will be called asynchronously
       // when the response is available
-      console.log(data);
+      //console.log(data);
       $scope.tasks = data
+    }).
+    error(function(data, status, headers, config) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      console.log("Error occured");
+    });
+  
+  $http.get('/authenticated').
+    success(function(data, status, headers, config) {
+      // this callback will be called asynchronously
+      // when the response is available
+      console.log(data);
+      if (data.result == "ok")
+          $scope.logged = false;
     }).
     error(function(data, status, headers, config) {
       // called asynchronously if an error occurs
@@ -45,6 +64,26 @@ app.controller('main_controller', function ($scope, $http) {
         // this callback will be called asynchronously
         // when the response is available
         console.log(data);
+      }).
+      error(function(data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        console.log(data);
+      });
+  };
+  
+  $scope.log_in = function() {
+    console.log($scope.username);
+    console.log($scope.password);
+    //authentication
+    var auth = {name: $scope.username, passhash: $scope.password};
+    $http.post('/authentication', auth).
+      success(function(data, status, headers, config) {
+        // this callback will be called asynchronously
+        // when the response is available
+        //console.log(data);
+        if (data.result == "ok")
+          $scope.logged = false;
       }).
       error(function(data, status, headers, config) {
         // called asynchronously if an error occurs
