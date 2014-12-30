@@ -4,8 +4,10 @@ var session = require('express-session');
 var file_io = require('./file_io.js');
 var app = express();
 
-var data = [];
+var data = file_io.read_json('task.json');
 var auth = file_io.read_json('pass.json');
+
+var version = {app: "todo server", version: "0.1b"};
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -25,14 +27,25 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/version', function (req, res) {
+  res.json(version);
+});
+
 app.get('/get_json', function(req, res) {
   res.json(data);
 });
 
 app.post('/set_json', function(req, res) {
+  var ret = {status: "fail", msg: ""};
   console.log(req.body);
-  data = req.body;
-  res.send({status: "ok"});
+  if (req.session.user) {
+    data = req.body;
+    file_io.write_json('task.json', data);
+    ret = {status: "ok"};
+  } else {
+    ret.msg = "Not authenticated";
+  }
+  res.send(ret);
 });
 
 app.get('/authenticated', function(req, res) {
@@ -51,6 +64,31 @@ app.post('/authentication', function(req, res) {
       sess.user = req.body.name;
       ret.result = "ok";
     }
+  res.send(ret);
+});
+
+app.get('/log_out', function(req, res) {
+  var ret = {result: "fail"};
+  if (req.session.user) {
+    delete req.session.user;
+    ret.result = "ok";
+  }
+  res.send(ret);
+});
+
+app.post('/create_new_user', function(req, res) {
+  var ret = {result: "fail", msg: "none"};
+  if (req.body.name && req.body.passhash && req.body.email){
+    if (!(req.body.name in auth)){
+      auth[req.body.name] = {"email": req.body.email, "passhash": req.body.passhash};
+      file_io.write_json('pass.json', auth);
+      ret.result = "ok";
+    } else {
+      ret.msg = "user already exist"
+    }
+  } else {
+    ret.msg = "sended data is not correct"
+  }
   res.send(ret);
 });
 

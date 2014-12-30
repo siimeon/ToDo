@@ -43,7 +43,8 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           
           <ul class="nav navbar-nav">
-            <li class=""><a data-toggle="modal" data-target="#myModal">Log in</a></li>
+            <li class="" ng-hide="logged"><a data-toggle="modal" data-target="#myModal">Log in</a></li>
+            <li class="" ng-show="logged"><a ng-click="log_out()">Log out</a></li>
           </ul>
           
           <form class="navbar-form navbar-left" role="search">
@@ -82,21 +83,28 @@
             </h4>
           </div>
           <div class="col-md-2">
-            <a class="btn btn-success" ng-click="do_task(task, $index)">DONE <span class="glyphicon glyphicon-ok"></span></a>
+            <a class="btn btn-success" ng-show="logged" ng-click="do_task(task, $index)">
+              DONE <span class="glyphicon glyphicon-ok"></span>
+            </a>
           </div>
         </div>
       </div>
       
-      <form class="input-group input-group-lg" ng-hide="logged">
+      <form class="input-group input-group-lg" id="add_form" ng-show="logged">
         
           <input type="text" class="form-control" ng-model="text">
           <span class="input-group-btn">
-            <button class="btn  btn-default" type="submit" ng-click="add_task()">
+            <button id="add_task" class="btn  btn-default" type="submit" data-loading-text="Sending..." ng-click="add_task()">
               Add task
             </button>
           </span>
-        
       </form>
+      
+      
+      <div class="alert alert-alert alert-danger" role="alert" ng-show="show_alert">
+        <button type="button" class="close" aria-label="Close" ng-click="show_alert = false"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> {{error_msg}}
+      </div>
     </div>
     
     <h1></h1>
@@ -124,15 +132,49 @@
                 <label for="exampleInputPassword1">Password</label>
                 <input type="password" class="form-control" placeholder="Password" ng-model="password">
               </div>
-              <button type="submit" class="btn btn-default" ng-click="log_in()">Submit</button>
+              <button type="submit" class="btn btn-primary" ng-click="log_in()">Submit</button>
             </form>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#registerModal">Register</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <!--<button type="button" class="btn btn-primary">Save changes</button>-->
           </div>
         </div>
       </div>
     </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Register</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                <input type="text" class="form-control" placeholder="Enter email" ng-model="username">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" placeholder="Password" ng-model="password">
+              </div>
+              <button type="submit" class="btn btn-primary" ng-click="register()">Submit</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    
   </body>
 </html>
