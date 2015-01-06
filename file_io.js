@@ -8,7 +8,7 @@ function read_json(file) {
 }
 
 function write_json(file, data) {
-  fs.writeFile(file, JSON.stringify(data), function (err) {
+  fs.writeFile(file, JSON.stringify(data, null, 4), function (err) {
     if (err) throw err;
     return true;
   });

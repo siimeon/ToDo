@@ -1,0 +1,18 @@
+[
+    {
+        "task": "Sample task one",
+        "description": "This is first sample task",
+        "user": "user",
+        "started": false,
+        "done": false,
+        "archived": false
+    },
+    {
+        "task": "Sample task two",
+        "description": "This is second sample task",
+        "user": "user",
+        "started": false,
+        "done": false,
+        "archived": false
+    }
+]
