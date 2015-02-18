@@ -2,13 +2,13 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var crypto = require('crypto');
-var file_io = require('./file_io.js');
+var file_io = require(__dirname + '//file_io.js');
 var app = express();
 
-var data = file_io.read_json('task.json');
-var auth = file_io.read_json('pass.json');
+var data = file_io.read_json(__dirname + '/task.json');
+var auth = file_io.read_json(__dirname + '/pass.json');
 
-var version = {app: "todo server", version: "0.1.2b"};
+var version = {app: "todo server", version: "0.1.3b"};
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -41,7 +41,7 @@ app.post('/set_json', function(req, res) {
   console.log(req.body);
   if (req.session.user) {
     data = req.body;
-    file_io.write_json('task.json', data);
+    file_io.write_json(__dirname + '/task.json', data);
     ret = {status: "ok"};
   } else {
     ret.msg = "Not authenticated";
@@ -88,7 +88,7 @@ app.post('/create_new_user', function(req, res) {
       var salt = crypto.randomBytes(256).toString();
       pass = crypto.pbkdf2Sync(req.body.passhash, salt, 200, 256).toString();
       auth[req.body.name] = {"email": req.body.email, "passhash": pass, "salt": salt};
-      file_io.write_json('pass.json', auth);
+      file_io.write_json(__dirname + '/pass.json', auth);
       ret.result = "ok";
     } else {
       ret.msg = "user already exist"
@@ -105,7 +105,7 @@ app.get('/random', function(req, res) {
 });
 
 
-var server = app.listen(3000, function () {
+var server = app.listen(80, function () {
 
   var host = server.address().address;
   var port = server.address().port;
