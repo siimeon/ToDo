@@ -5,7 +5,7 @@ app.controller('main_controller', function ($scope, $http) {
   $scope.header = "What to do next?";
   $scope.logged = false;
   $scope.text = "";
-  $scope.version = {app: "todo client", version: "0.1.2b"};
+  $scope.version = {app: "todo client", version: "0.1.3b"};
 
   //
   $scope.logged_in_user = "";
