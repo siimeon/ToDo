@@ -1,0 +1,28 @@
+{
+  "name": "ToDo",
+  "version": "0.1.3-b",
+  "description": "ToDo app",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.10.0",
+    "express": "^4.10.6",
+    "express-session": "^1.9.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/siimeon/ToDo.git"
+  },
+  "keywords": [
+    "todo"
+  ],
+  "author": "siimeon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/siimeon/ToDo/issues"
+  },
+  "homepage": "https://github.com/siimeon/ToDo"
+}
